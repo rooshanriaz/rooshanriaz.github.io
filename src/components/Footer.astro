@@ -27,7 +27,6 @@ const year = new Date().getFullYear();
         {site.socials.map((item) => (
           <li><a href={item.href} rel="me">{item.label}</a></li>
         ))}
-        <li><a href="/rss.xml">RSS</a></li>
         <li><a href={`mailto:${site.email}`}>Email</a></li>
       </ul>
     </div>
