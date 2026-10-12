@@ -1,0 +1,56 @@
+---
+import Base from '../layouts/Base.astro';
+import { formatDate, getPublishedPosts, readingTime } from '../lib/posts';
+
+const posts = (await getPublishedPosts()).map((post) => ({
+  title: post.data.title,
+  excerpt: post.data.excerpt,
+  href: `/blog/${post.id}`,
+  date: formatDate(post.data.pubDate),
+  minutes: readingTime(post.body ?? ''),
+  topics: post.data.topics,
+}));
+---
+
+<Base title="Search" description="Search notes on Rooshan's site.">
+  <div class="shell section">
+    <p class="kicker">Search</p>
+    <h1 class="page-title">Look through the notes</h1>
+    <label for="q" class="page-intro">Type a title, topic, or phrase.</label>
+    <input class="search-box" id="q" type="search" placeholder="Search writeups…" autocomplete="off" />
+    <div class="post-list" data-results></div>
+  </div>
+</Base>
+
+<script define:vars={{ posts }}>
+  const input = document.getElementById('q');
+  const results = document.querySelector('[data-results]');
+
+  function render(query) {
+    const q = query.trim().toLowerCase();
+    const matches = q
+      ? posts.filter((post) =>
+          `${post.title} ${post.excerpt} ${post.topics.join(' ')}`.toLowerCase().includes(q),
+        )
+      : posts;
+    results.innerHTML = matches
+      .map(
+        (post) => `
+        <a class="post-row" href="${post.href}">
+          <time>${post.date}</time>
+          <div>
+            <h2>${post.title}</h2>
+            <p>${post.excerpt}</p>
+            <p class="meta">${post.minutes} min read</p>
+          </div>
+          <div class="topics">${post.topics.map((topic) => `<span class="chip">${topic}</span>`).join('')}</div>
+        </a>`,
+      )
+      .join('') || '<p class="page-intro">No matching notes.</p>';
+  }
+
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('q')) input.value = params.get('q');
+  render(input.value);
+  input.addEventListener('input', () => render(input.value));
+</script>

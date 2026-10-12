@@ -1,0 +1,23 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getPublishedPosts, getTopics } from '../../lib/posts';
+
+const posts = await getPublishedPosts();
+const topics = getTopics(posts);
+---
+
+<Base title="Topics" description="Browse Rooshan's notes by topic.">
+  <div class="shell section">
+    <p class="kicker">Index</p>
+    <h1 class="page-title">Find your way by topic</h1>
+    <p class="page-intro">Browse the archive by category. More tracks open as the posts land.</p>
+    <div class="topic-grid" style="margin-top: 2rem;">
+      {topics.map((topic) => (
+        <a class="topic-card" href={`/topics/${topic.slug}`}>
+          <strong>{topic.name}</strong>
+          <span>{topic.count} {topic.count === 1 ? 'note' : 'notes'}</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</Base>

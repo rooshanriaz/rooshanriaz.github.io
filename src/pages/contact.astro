@@ -1,0 +1,50 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../site.config';
+
+const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT as string | undefined;
+---
+
+<Base title="Contact" description={`Get in touch with ${site.name}.`}>
+  <div class="shell section">
+    <p class="kicker">Contact</p>
+    <h1 class="page-title">Start a conversation</h1>
+    <p class="page-intro">
+      A question, a correction, or something to collaborate on. I read everything that lands here.
+    </p>
+
+    <form class="form" method="POST" action={endpoint || '#'} data-contact-form>
+      <input type="hidden" name="_subject" value={`Note for ${site.name}`} />
+      <label>
+        Name
+        <input type="text" name="name" autocomplete="name" required />
+      </label>
+      <label>
+        Email
+        <input type="email" name="email" autocomplete="email" required />
+      </label>
+      <label>
+        Message
+        <textarea name="message" required></textarea>
+      </label>
+      <button type="submit">Send</button>
+    </form>
+    <p class="page-intro" style="margin-top: 1.2rem;">
+      Or email <a class="more" href={`mailto:${site.email}`}>{site.email}</a> directly.
+    </p>
+  </div>
+</Base>
+
+<script define:vars={{ endpoint, email: site.email }}>
+  const form = document.querySelector('[data-contact-form]');
+  form?.addEventListener('submit', (event) => {
+    if (endpoint) return;
+    event.preventDefault();
+    const data = new FormData(form);
+    const name = String(data.get('name') || '');
+    const from = String(data.get('email') || '');
+    const message = String(data.get('message') || '');
+    const body = encodeURIComponent(`${message}\n\n— ${name} <${from}>`);
+    window.location.href = `mailto:${email}?subject=${encodeURIComponent('Note from the site')}&body=${body}`;
+  });
+</script>

@@ -1,0 +1,40 @@
+---
+import Base from '../layouts/Base.astro';
+import PostRow from '../components/PostRow.astro';
+import { site } from '../site.config';
+import { getPublishedPosts } from '../lib/posts';
+
+const posts = (await getPublishedPosts()).slice(0, 6);
+---
+
+<Base>
+  <div class="shell">
+    <section class="hero">
+      <div>
+        <p class="kicker">Notes, writeups, and work in public</p>
+        <h1>{site.name}</h1>
+        <p class="lede">{site.tagline}</p>
+      </div>
+      <aside class="hero-aside">
+        <p class="kicker">Now</p>
+        <p>
+          A quiet corner for what I am learning. Start with the latest notes, or
+          {' '}<a class="more" href="/about">read about me</a>.
+        </p>
+      </aside>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2>Recent notes</h2>
+        <a class="more" href="/blog">View all</a>
+      </div>
+      <div class="post-list">
+        {posts.map((post) => (
+          <PostRow post={post} />
+        ))}
+      </div>
+    </section>
+
+  </div>
+</Base>

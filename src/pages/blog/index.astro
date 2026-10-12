@@ -1,0 +1,20 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostRow from '../../components/PostRow.astro';
+import { getPublishedPosts } from '../../lib/posts';
+
+const posts = await getPublishedPosts();
+---
+
+<Base title="Blog" description="All notes and writeups from Rooshan.">
+  <div class="shell section">
+    <p class="kicker">Archive</p>
+    <h1 class="page-title">The whole catalogue</h1>
+    <p class="page-intro">Walkthroughs, research, and notes from the things I break, build, and learn.</p>
+    <div class="post-list" style="margin-top: 2rem;">
+      {posts.map((post) => (
+        <PostRow post={post} />
+      ))}
+    </div>
+  </div>
+</Base>

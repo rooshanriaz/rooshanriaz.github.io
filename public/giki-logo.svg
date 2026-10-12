@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-labelledby="title desc">
+  <title id="title">GIKI logo</title>
+  <desc id="desc">GIKI Institute monogram</desc>
+  <circle cx="80" cy="80" r="74" fill="#6f1d2c"/>
+  <circle cx="80" cy="80" r="63" fill="none" stroke="#d8b36a" stroke-width="3"/>
+  <path d="M80 25 112 38v35c0 25-14 45-32 56-18-11-32-31-32-56V38l32-13Z" fill="#f4efe5"/>
+  <path d="M64 58h32v10H75v9h18v10H75v16H64V58Z" fill="#6f1d2c"/>
+  <path d="M101 58h11l-13 18 14 27H101L90 81l11-23Z" fill="#6f1d2c"/>
+  <text x="80" y="143" fill="#f4efe5" font-family="Georgia, serif" font-size="10" font-weight="700" text-anchor="middle" letter-spacing="2">GIKI</text>
+</svg>

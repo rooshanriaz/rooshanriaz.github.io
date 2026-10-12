@@ -1,0 +1,45 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import TableOfContents from '../../components/TableOfContents.astro';
+import { formatDate, getPublishedPosts, readingTime, topicSlug } from '../../lib/posts';
+import { site } from '../../site.config';
+
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts();
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+const minutes = readingTime(post.body ?? '');
+---
+
+<Base title={post.data.title} description={post.data.excerpt}>
+  <article class="shell article">
+    <TableOfContents headings={headings} />
+    <div class="article-body">
+      <p class="kicker">{formatDate(post.data.pubDate)} · {minutes} min read · {site.author}</p>
+      <h1>{post.data.title}</h1>
+      <p class="excerpt">{post.data.excerpt}</p>
+      <div class="topics" style="justify-content: flex-start; margin: 1rem 0 2rem;">
+        {post.data.topics.map((topic) => (
+          <a class="chip" href={`/topics/${topicSlug(topic)}`}>{topic}</a>
+        ))}
+      </div>
+      {
+        post.data.externalUrl && (
+          <p>
+            <a class="more" href={post.data.externalUrl}>Related link</a>
+          </p>
+        )
+      }
+      <div class="prose">
+        <Content />
+      </div>
+    </div>
+  </article>
+</Base>

@@ -1,0 +1,24 @@
+---
+import { formatDate, readingTime, type Post } from '../lib/posts';
+
+interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+const minutes = readingTime(post.body ?? '');
+---
+
+<a class="post-row" href={`/blog/${post.id}`}>
+  <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
+  <div>
+    <h2>{post.data.title}</h2>
+    <p>{post.data.excerpt}</p>
+    <p class="meta">{minutes} min read</p>
+  </div>
+  <div class="topics">
+    {post.data.topics.map((topic) => (
+      <span class="chip">{topic}</span>
+    ))}
+  </div>
+</a>
